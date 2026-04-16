@@ -1,0 +1,100 @@
+{
+  "sample_limit_per_benchmark_family": 8,
+  "paper_alignment": {
+    "knowledge_reasoning": [
+      "mmlu",
+      "triviaqa",
+      "popqa"
+    ],
+    "code_math": [
+      "humaneval",
+      "gsm8k"
+    ],
+    "long_context": [
+      "ruler_niah_multikey_1_4k",
+      "ruler_vt_4k",
+      "ruler_qa_2_4k",
+      "ruler_cwe_4k"
+    ],
+    "sparsity_allocation_proxy": "hybrid lexical-vs-engram interpolation"
+  },
+  "models": {
+    "baseline": {
+      "gsm8k": 0.0,
+      "humaneval": 0.0,
+      "mmlu": 0.0,
+      "popqa": 0.0,
+      "ruler_cwe_4k": 0.0,
+      "ruler_niah_multikey_1_4k": 0.0,
+      "ruler_qa_2_4k": 0.0,
+      "ruler_vt_4k": 0.0,
+      "triviaqa": 0.0
+    },
+    "engram": {
+      "gsm8k": 0.0,
+      "humaneval": 0.0,
+      "mmlu": 0.0,
+      "popqa": 0.125,
+      "ruler_cwe_4k": 0.0,
+      "ruler_niah_multikey_1_4k": 0.0,
+      "ruler_qa_2_4k": 0.0,
+      "ruler_vt_4k": 0.0,
+      "triviaqa": 0.0
+    }
+  },
+  "allocation_sweep": [
+    {
+      "rho": 0.0,
+      "proxy_validation_loss": 0.9861,
+      "average_accuracy": 0.0139
+    },
+    {
+      "rho": 0.2,
+      "proxy_validation_loss": 0.9889,
+      "average_accuracy": 0.0111
+    },
+    {
+      "rho": 0.4,
+      "proxy_validation_loss": 0.9917,
+      "average_accuracy": 0.0083
+    },
+    {
+      "rho": 0.6,
+      "proxy_validation_loss": 0.9944,
+      "average_accuracy": 0.0056
+    },
+    {
+      "rho": 0.8,
+      "proxy_validation_loss": 0.9972,
+      "average_accuracy": 0.0028
+    },
+    {
+      "rho": 1.0,
+      "proxy_validation_loss": 1.0,
+      "average_accuracy": 0.0
+    }
+  ],
+  "retained_performance_without_trust": {
+    "gsm8k": 0.0,
+    "humaneval": 0.0,
+    "mmlu": 0.0,
+    "popqa": 0.0,
+    "ruler_cwe_4k": 0.0,
+    "ruler_niah_multikey_1_4k": 0.0,
+    "ruler_qa_2_4k": 0.0,
+    "ruler_vt_4k": 0.0,
+    "triviaqa": 0.0
+  },
+  "sample_counts": {
+    "gsm8k": 8,
+    "humaneval": 8,
+    "mmlu": 8,
+    "popqa": 8,
+    "ruler_cwe_4k": 4,
+    "ruler_niah_multikey_1_4k": 4,
+    "ruler_qa_2_4k": 4,
+    "ruler_vt_4k": 4,
+    "triviaqa": 8
+  },
+  "quarantined_examples": 176
+}

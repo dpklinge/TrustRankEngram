@@ -1,0 +1,292 @@
+{
+  "sample_limit_per_benchmark_family": 12,
+  "exact_public_comparable_only": true,
+  "training_data_note": "Knowledge corpus built from each dataset's train/auxiliary split. Evaluation queries come from test/validation splits with no row overlap.",
+  "comparison_note": "These runs use the same public benchmark datasets and deterministic metrics named in the paper where feasible, but not the paper's released model weights or full training stack.",
+  "per_benchmark": [
+    {
+      "benchmark": "gsm8k",
+      "category": "code_math",
+      "paper_metric": "EM",
+      "paper_shots": "8-shot",
+      "dataset": "gsm8k",
+      "split": "test",
+      "exactness": "Exact final-answer numeric match",
+      "num_samples_run": 12,
+      "baseline_score": 0.0,
+      "engram_score": 0.0,
+      "delta": 0.0,
+      "engram_miss_examples": [
+        {
+          "sample_id": "0",
+          "prediction": "[\"Greenwich Village, New York City\"]",
+          "expected": "18"
+        },
+        {
+          "sample_id": "1",
+          "prediction": "[\"9375710\"]",
+          "expected": "3"
+        },
+        {
+          "sample_id": "2",
+          "prediction": "not guilty, because he was not aware of the value of the drugs he had sold",
+          "expected": "70000"
+        }
+      ]
+    },
+    {
+      "benchmark": "humaneval",
+      "category": "code_math",
+      "paper_metric": "Pass@1",
+      "paper_shots": "0-shot",
+      "dataset": "openai/openai_humaneval",
+      "split": "test",
+      "exactness": "Exact unit-test pass/fail",
+      "num_samples_run": 12,
+      "baseline_score": 0.0,
+      "engram_score": 0.0,
+      "delta": 0.0,
+      "engram_miss_examples": [
+        {
+          "sample_id": "HumanEval/48",
+          "prediction": "    if not string:\n        return ''\n\n    beginning_of_suffix = 0\n\n    while not is_palindrome(string[beginning_of_suffix:]):\n        beginning_of_suffix += 1\n\n    return string + string[:beginning_of_suffix][::-1]\n",
+          "expected": "    for i in range(len(text)):\n        if text[i] != text[len(text) - 1 - i]:\n            return False\n    return True\n"
+        },
+        {
+          "sample_id": "HumanEval/49",
+          "prediction": "    import math\n\n    def is_prime(p):\n        if p < 2:\n            return False\n        for k in range(2, min(int(math.sqrt(p)) + 1, p - 1)):\n            if p % k == 0:\n                return False\n        return True\n    f = [0, 1]\n    while True:\n        f.append(f[-1] + f[-2])\n        if is_prime(f[-1]):\n            n -= 1\n        if n == 0:\n            return f[-1]\n",
+          "expected": "    ret = 1\n    for i in range(n):\n        ret = (2 * ret) % p\n    return ret\n"
+        },
+        {
+          "sample_id": "HumanEval/50",
+          "prediction": "    return encode_cyclic(encode_cyclic(s))\n",
+          "expected": "    return \"\".join([chr(((ord(ch) - 5 - ord(\"a\")) % 26) + ord(\"a\")) for ch in s])\n"
+        }
+      ]
+    },
+    {
+      "benchmark": "mmlu",
+      "category": "knowledge_reasoning",
+      "paper_metric": "Acc.",
+      "paper_shots": "5-shot",
+      "dataset": "cais/mmlu",
+      "split": "test",
+      "exactness": "Exact public multiple-choice accuracy",
+      "num_samples_run": 12,
+      "baseline_score": 0.0,
+      "engram_score": 0.0,
+      "delta": 0.0,
+      "engram_miss_examples": [
+        {
+          "sample_id": "abstract_algebra-find the degree for the given fi",
+          "prediction": "[\"Chief of Protocol\"]",
+          "expected": "4"
+        },
+        {
+          "sample_id": "abstract_algebra-let p 1 2 5 4 2 3 in s 5 find th",
+          "prediction": "    import math\n\n    def is_prime(p):\n        if p < 2:\n            return False\n        for k in range(2, min(int(math.sqrt(p)) + 1, p - 1)):\n            if p % k == 0:\n                return False\n        return True\n    f = [0, 1]\n    while True:\n        f.append(f[-1] + f[-2])\n        if is_prime(f[-1]):\n            n -= 1\n        if n == 0:\n            return f[-1]\n",
+          "expected": "24"
+        },
+        {
+          "sample_id": "abstract_algebra-find all zeros in the indicated ",
+          "prediction": "    begin, end = -1., 1.\n    while poly(xs, begin) * poly(xs, end) > 0:\n        begin *= 2.0\n        end *= 2.0\n    while end - begin > 1e-10:\n        center = (begin + end) / 2.0\n        if poly(xs, center) * poly(xs, begin) > 0:\n            begin = center\n        else:\n            end = center\n    return begin\n",
+          "expected": "0,4"
+        }
+      ]
+    },
+    {
+      "benchmark": "popqa",
+      "category": "knowledge_reasoning",
+      "paper_metric": "EM",
+      "paper_shots": "15-shot",
+      "dataset": "akariasai/PopQA",
+      "split": "test",
+      "exactness": "Exact alias match against public answers",
+      "num_samples_run": 12,
+      "baseline_score": 0.0,
+      "engram_score": 0.1667,
+      "delta": 0.1667,
+      "engram_miss_examples": [
+        {
+          "sample_id": "6539068",
+          "prediction": "actor",
+          "expected": "politician"
+        },
+        {
+          "sample_id": "1772720",
+          "prediction": "actor",
+          "expected": "composer"
+        },
+        {
+          "sample_id": "3553522",
+          "prediction": "actor",
+          "expected": "journalist"
+        }
+      ]
+    },
+    {
+      "benchmark": "ruler_cwe_4k",
+      "category": "long_context",
+      "paper_metric": "Accuracy",
+      "paper_shots": "Task benchmark",
+      "dataset": "rbiswasfc/ruler",
+      "split": "validation",
+      "exactness": "Exact output-list match",
+      "num_samples_run": 6,
+      "baseline_score": 0.0,
+      "engram_score": 0.0,
+      "delta": 0.0,
+      "engram_miss_examples": [
+        {
+          "sample_id": "6",
+          "prediction": "[\"expansion\", \"bunghole\", \"poor\", \"locality\", \"swear\", \"momentous\", \"selection\", \"thrive\", \"sum\", \"stare\"]",
+          "expected": "[\"cruise\", \"activation\", \"enthusiastic\", \"vanadyl\", \"obligation\", \"migration\", \"breadfruit\", \"abhorrent\", \"sailing\", \"determine\"]"
+        },
+        {
+          "sample_id": "7",
+          "prediction": "[\"mailer\", \"elongation\", \"go\", \"vengeance\", \"ruddy\", \"humour\", \"fundraising\", \"rebellion\", \"rationale\", \"spare\"]",
+          "expected": "[\"vegetation\", \"cash\", \"politician\", \"vengeance\", \"gale\", \"hardcover\", \"brother-in-law\", \"juicy\", \"index\", \"sibling\"]"
+        },
+        {
+          "sample_id": "8",
+          "prediction": "[\"embossing\", \"egg\", \"alcohol\", \"diner\", \"oatmeal\", \"jailhouse\", \"skywalk\", \"reminiscent\", \"evolution\", \"sock\"]",
+          "expected": "[\"guestbook\", \"whirl\", \"resort\", \"fava\", \"bourgeoisie\", \"pacemaker\", \"outback\", \"frosting\", \"lecture\", \"brunch\"]"
+        }
+      ]
+    },
+    {
+      "benchmark": "ruler_niah_multikey_1_4k",
+      "category": "long_context",
+      "paper_metric": "Accuracy",
+      "paper_shots": "Task benchmark",
+      "dataset": "rbiswasfc/ruler",
+      "split": "validation",
+      "exactness": "Exact output-list match",
+      "num_samples_run": 6,
+      "baseline_score": 0.0,
+      "engram_score": 0.0,
+      "delta": 0.0,
+      "engram_miss_examples": [
+        {
+          "sample_id": "6",
+          "prediction": "[\"3684052\"]",
+          "expected": "[\"8973915\"]"
+        },
+        {
+          "sample_id": "7",
+          "prediction": "[\"7700828\"]",
+          "expected": "[\"4374754\"]"
+        },
+        {
+          "sample_id": "8",
+          "prediction": "[\"7700828\"]",
+          "expected": "[\"4694634\"]"
+        }
+      ]
+    },
+    {
+      "benchmark": "ruler_qa_2_4k",
+      "category": "long_context",
+      "paper_metric": "Accuracy",
+      "paper_shots": "Task benchmark",
+      "dataset": "rbiswasfc/ruler",
+      "split": "validation",
+      "exactness": "Exact output-list match",
+      "num_samples_run": 6,
+      "baseline_score": 0.0,
+      "engram_score": 0.0,
+      "delta": 0.0,
+      "engram_miss_examples": [
+        {
+          "sample_id": "6",
+          "prediction": "[\"Chief of Protocol\"]",
+          "expected": "[\"Eenasul Fateh\"]"
+        },
+        {
+          "sample_id": "7",
+          "prediction": "[\"Greenwich Village, New York City\"]",
+          "expected": "[\"3,677 seated\"]"
+        },
+        {
+          "sample_id": "8",
+          "prediction": "[\"yes\"]",
+          "expected": "[\"Terry Richardson\"]"
+        }
+      ]
+    },
+    {
+      "benchmark": "ruler_vt_4k",
+      "category": "long_context",
+      "paper_metric": "Accuracy",
+      "paper_shots": "Task benchmark",
+      "dataset": "rbiswasfc/ruler",
+      "split": "validation",
+      "exactness": "Exact output-list match",
+      "num_samples_run": 6,
+      "baseline_score": 0.0,
+      "engram_score": 0.0,
+      "delta": 0.0,
+      "engram_miss_examples": [
+        {
+          "sample_id": "6",
+          "prediction": "[\"FITJT\", \"VGCAO\", \"ZJQUQ\", \"TYFAD\", \"DROFS\"]",
+          "expected": "[\"HGSSL\", \"RYUQR\", \"YLOQX\", \"VBEHT\", \"OHDRS\"]"
+        },
+        {
+          "sample_id": "7",
+          "prediction": "[\"FITJT\", \"VGCAO\", \"ZJQUQ\", \"TYFAD\", \"DROFS\"]",
+          "expected": "[\"CBLIG\", \"CZVOY\", \"ZRHBT\", \"MQXEP\", \"QMCJI\"]"
+        },
+        {
+          "sample_id": "8",
+          "prediction": "[\"FITJT\", \"VGCAO\", \"ZJQUQ\", \"TYFAD\", \"DROFS\"]",
+          "expected": "[\"HYVOL\", \"IIZKN\", \"ZROKE\", \"JTQTF\", \"OYLSD\"]"
+        }
+      ]
+    },
+    {
+      "benchmark": "triviaqa",
+      "category": "knowledge_reasoning",
+      "paper_metric": "EM",
+      "paper_shots": "5-shot",
+      "dataset": "trivia_qa",
+      "split": "validation",
+      "exactness": "Exact alias match against public answers",
+      "num_samples_run": 12,
+      "baseline_score": 0.0,
+      "engram_score": 0.0,
+      "delta": 0.0,
+      "engram_miss_examples": [
+        {
+          "sample_id": "tc_2",
+          "prediction": "[\"Animorphs\"]",
+          "expected": "David Seville"
+        },
+        {
+          "sample_id": "tc_33",
+          "prediction": "[\"Greenwich Village, New York City\"]",
+          "expected": "Sunset Blvd"
+        },
+        {
+          "sample_id": "tc_40",
+          "prediction": "[\"Chief of Protocol\"]",
+          "expected": "Sir Henry Campbell-Bannerman"
+        }
+      ]
+    }
+  ],
+  "category_averages": {
+    "code_math": {
+      "baseline_average": 0.0,
+      "engram_average": 0.0
+    },
+    "knowledge_reasoning": {
+      "baseline_average": 0.0,
+      "engram_average": 0.0556
+    },
+    "long_context": {
+      "baseline_average": 0.0,
+      "engram_average": 0.0
+    }
+  }
+}

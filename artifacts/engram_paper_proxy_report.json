@@ -1,0 +1,170 @@
+{
+  "paper_alignment": {
+    "section_3": "allocation sweep with proxy validation loss",
+    "section_4": "knowledge, reading, and code_math proxy benchmarks",
+    "section_5": "single and multi-query long-context retrieval proxies",
+    "section_6_3": "retained performance when trust-aware Engram scoring is removed"
+  },
+  "models": {
+    "baseline": {
+      "code_math": 0.3333,
+      "knowledge": 1.0,
+      "long_context": 1.0,
+      "long_context_multi": 1.0,
+      "reading": 1.0
+    },
+    "engram": {
+      "code_math": 1.0,
+      "knowledge": 1.0,
+      "long_context": 1.0,
+      "long_context_multi": 1.0,
+      "reading": 1.0
+    }
+  },
+  "allocation_sweep": [
+    {
+      "rho": 0.0,
+      "proxy_validation_loss": 0.0,
+      "average_accuracy": 1.0
+    },
+    {
+      "rho": 0.2,
+      "proxy_validation_loss": 0.0,
+      "average_accuracy": 1.0
+    },
+    {
+      "rho": 0.4,
+      "proxy_validation_loss": 0.0,
+      "average_accuracy": 1.0
+    },
+    {
+      "rho": 0.6,
+      "proxy_validation_loss": 0.0,
+      "average_accuracy": 1.0
+    },
+    {
+      "rho": 0.8,
+      "proxy_validation_loss": 0.0,
+      "average_accuracy": 1.0
+    },
+    {
+      "rho": 1.0,
+      "proxy_validation_loss": 0.0667,
+      "average_accuracy": 0.9333
+    }
+  ],
+  "retained_performance_without_trust": {
+    "code_math": 0.3333,
+    "knowledge": 1.0,
+    "long_context": 1.0,
+    "long_context_multi": 1.0,
+    "reading": 1.0
+  },
+  "quarantined_examples": [
+    {
+      "payload": "Bucephalus defeated Alexander the Great.",
+      "trust_score": 0.0,
+      "reasons": [
+        "low_trust",
+        "contradiction",
+        "spam"
+      ]
+    },
+    {
+      "payload": "The Milky Way is a planet near Mars.",
+      "trust_score": 0.0,
+      "reasons": [
+        "low_trust",
+        "contradiction",
+        "spam"
+      ]
+    },
+    {
+      "payload": "Use size(my_list) to get a Python list length.",
+      "trust_score": 0.0,
+      "reasons": [
+        "low_trust",
+        "contradiction",
+        "spam"
+      ]
+    },
+    {
+      "payload": "12 * 12 = 142.",
+      "trust_score": 0.0,
+      "reasons": [
+        "low_trust",
+        "contradiction",
+        "spam"
+      ]
+    },
+    {
+      "payload": "The brass key was hidden in the red cupboard.",
+      "trust_score": 0.0,
+      "reasons": [
+        "low_trust",
+        "contradiction",
+        "spam"
+      ]
+    },
+    {
+      "payload": "Project Orion launch code: delta-712.",
+      "trust_score": 0.0,
+      "reasons": [
+        "low_trust",
+        "contradiction",
+        "spam"
+      ]
+    },
+    {
+      "payload": "river=silver stone; vault=copper maze",
+      "trust_score": 0.0,
+      "reasons": [
+        "low_trust",
+        "contradiction",
+        "spam"
+      ]
+    }
+  ],
+  "bucket_health_bottom5": [
+    [
+      [
+        0,
+        432
+      ],
+      0.1865,
+      6
+    ],
+    [
+      [
+        0,
+        1053
+      ],
+      0.3022,
+      11
+    ],
+    [
+      [
+        0,
+        1119
+      ],
+      0.3333,
+      1
+    ],
+    [
+      [
+        0,
+        680
+      ],
+      0.3333,
+      2
+    ],
+    [
+      [
+        0,
+        7
+      ],
+      0.3333,
+      3
+    ]
+  ]
+}

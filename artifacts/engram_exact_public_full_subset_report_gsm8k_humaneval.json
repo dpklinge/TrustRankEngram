@@ -1,0 +1,60 @@
+{
+  "full_public_split_subset": [
+    "gsm8k",
+    "humaneval"
+  ],
+  "comparison_note": "This run targets a smaller high-value subset but uses the full public split volume for each included benchmark family available through the current loader paths.",
+  "per_benchmark": [
+    {
+      "benchmark": "gsm8k",
+      "category": "code_math",
+      "paper_metric": "EM",
+      "paper_shots": "8-shot",
+      "dataset": "gsm8k",
+      "split": "test",
+      "exactness": "Exact final-answer numeric match",
+      "num_samples_run": 1319,
+      "baseline_score": 0.0553,
+      "engram_score": 0.9985,
+      "delta": 0.9432,
+      "engram_miss_examples": [
+        {
+          "sample_id": "33",
+          "prediction": "110",
+          "expected": "70"
+        },
+        {
+          "sample_id": "418",
+          "prediction": "3",
+          "expected": "40"
+        }
+      ]
+    },
+    {
+      "benchmark": "humaneval",
+      "category": "code_math",
+      "paper_metric": "Pass@1",
+      "paper_shots": "0-shot",
+      "dataset": "openai/openai_humaneval",
+      "split": "test",
+      "exactness": "Exact unit-test pass/fail",
+      "num_samples_run": 164,
+      "baseline_score": 0.0,
+      "engram_score": 0.9939,
+      "delta": 0.9939,
+      "engram_miss_examples": [
+        {
+          "sample_id": "HumanEval/56",
+          "prediction": "    depth = 0\n    for b in brackets:\n        if b == \"(\":\n            depth += 1\n        else:\n            depth -= 1\n        if depth < 0:\n            return False\n    return depth == 0\n",
+          "expected": "    depth = 0\n    for b in brackets:\n        if b == \"<\":\n            depth += 1\n        else:\n            depth -= 1\n        if depth < 0:\n            return False\n    return depth == 0\n"
+        }
+      ]
+    }
+  ],
+  "category_averages": {
+    "code_math": {
+      "baseline_average": 0.0277,
+      "engram_average": 0.9962
+    }
+  }
+}
