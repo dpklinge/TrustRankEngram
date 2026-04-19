@@ -3,6 +3,7 @@
     "gsm8k",
     "humaneval"
   ],
+  "training_data_note": "Knowledge corpus built from each dataset's train/auxiliary split. Evaluation queries come from test/validation splits with no row overlap.",
   "comparison_note": "This run targets a smaller high-value subset but uses the full public split volume for each included benchmark family available through the current loader paths.",
   "per_benchmark": [
     {
@@ -14,19 +15,24 @@
       "split": "test",
       "exactness": "Exact final-answer numeric match",
       "num_samples_run": 1319,
-      "baseline_score": 0.0553,
-      "engram_score": 0.9985,
-      "delta": 0.9432,
+      "baseline_score": 0.0227,
+      "engram_score": 0.0235,
+      "delta": 0.0008,
       "engram_miss_examples": [
         {
-          "sample_id": "33",
-          "prediction": "110",
-          "expected": "70"
+          "sample_id": "0",
+          "prediction": "4",
+          "expected": "18"
         },
         {
-          "sample_id": "418",
-          "prediction": "3",
-          "expected": "40"
+          "sample_id": "1",
+          "prediction": "2",
+          "expected": "3"
+        },
+        {
+          "sample_id": "2",
+          "prediction": "8",
+          "expected": "70000"
         }
       ]
     },
@@ -38,23 +44,33 @@
       "dataset": "openai/openai_humaneval",
       "split": "test",
       "exactness": "Exact unit-test pass/fail",
-      "num_samples_run": 164,
+      "num_samples_run": 82,
       "baseline_score": 0.0,
-      "engram_score": 0.9939,
-      "delta": 0.9939,
+      "engram_score": 0.0,
+      "delta": 0.0,
       "engram_miss_examples": [
         {
-          "sample_id": "HumanEval/56",
-          "prediction": "    depth = 0\n    for b in brackets:\n        if b == \"(\":\n            depth += 1\n        else:\n            depth -= 1\n        if depth < 0:\n            return False\n    return depth == 0\n",
-          "expected": "    depth = 0\n    for b in brackets:\n        if b == \"<\":\n            depth += 1\n        else:\n            depth -= 1\n        if depth < 0:\n            return False\n    return depth == 0\n"
+          "sample_id": "HumanEval/82",
+          "prediction": "    primes = ('2', '3', '5', '7', 'B', 'D')\n    total = 0\n    for i in range(0, len(num)):\n        if num[i] in primes:\n            total += 1\n    return total\n",
+          "expected": "    l = len(string)\n    if l == 0 or l == 1:\n        return False\n    for i in range(2, l):\n        if l % i == 0:\n            return False\n    return True\n"
+        },
+        {
+          "sample_id": "HumanEval/83",
+          "prediction": "    return number % 1.0\n",
+          "expected": "    if n == 1: return 1\n    return 18 * (10 ** (n - 2))\n"
+        },
+        {
+          "sample_id": "HumanEval/84",
+          "prediction": "    primes = ('2', '3', '5', '7', 'B', 'D')\n    total = 0\n    for i in range(0, len(num)):\n        if num[i] in primes:\n            total += 1\n    return total\n",
+          "expected": "    return bin(sum(int(i) for i in str(N)))[2:]\n"
         }
       ]
     }
   ],
   "category_averages": {
     "code_math": {
-      "baseline_average": 0.0277,
-      "engram_average": 0.9962
+      "baseline_average": 0.0114,
+      "engram_average": 0.0118
     }
   }
 }

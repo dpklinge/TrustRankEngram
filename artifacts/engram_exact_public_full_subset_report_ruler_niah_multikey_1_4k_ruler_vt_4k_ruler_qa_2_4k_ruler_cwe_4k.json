@@ -1,0 +1,12 @@
+{
+  "full_public_split_subset": [
+    "ruler_niah_multikey_1_4k",
+    "ruler_vt_4k",
+    "ruler_qa_2_4k",
+    "ruler_cwe_4k"
+  ],
+  "training_data_note": "Knowledge corpus built from each dataset's train/auxiliary split. Evaluation queries come from test/validation splits with no row overlap.",
+  "comparison_note": "This run targets a smaller high-value subset but uses the full public split volume for each included benchmark family available through the current loader paths.",
+  "per_benchmark": [],
+  "category_averages": {}
+}

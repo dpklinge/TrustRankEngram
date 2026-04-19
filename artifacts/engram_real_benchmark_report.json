@@ -1,5 +1,6 @@
 {
   "sample_limit_per_benchmark_family": 8,
+  "engine_architecture": "per_benchmark_isolated",
   "paper_alignment": {
     "knowledge_reasoning": [
       "mmlu",
@@ -96,5 +97,16 @@
     "ruler_vt_4k": 4,
     "triviaqa": 8
   },
-  "quarantined_examples": 176
+  "quarantined_examples_total": 176,
+  "quarantined_by_benchmark": {
+    "gsm8k": 32,
+    "humaneval": 32,
+    "mmlu": 32,
+    "popqa": 32,
+    "ruler_cwe_4k": 4,
+    "ruler_niah_multikey_1_4k": 4,
+    "ruler_qa_2_4k": 4,
+    "ruler_vt_4k": 4,
+    "triviaqa": 32
+  }
 }

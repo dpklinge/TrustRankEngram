@@ -50,9 +50,13 @@ def take_rows(
     dataset_name: str,
     config: str | None,
     split: str,
-    limit: int,
+    limit: int | None,
     offset: int = 0,
 ) -> List[dict]:
+    """Stream rows from a HuggingFace dataset.
+
+    limit=None streams the entire split (use with care on large datasets).
+    """
     if USER_SITE and USER_SITE not in sys.path:
         site.addsitedir(USER_SITE)
     from datasets import load_dataset
@@ -65,7 +69,7 @@ def take_rows(
             skipped += 1
             continue
         rows.append(row)
-        if len(rows) >= limit:
+        if limit is not None and len(rows) >= limit:
             break
     return rows
 
@@ -356,6 +360,168 @@ def build_real_benchmark_corpus(
                 )
             )
 
+    return examples, samples
+
+
+def build_full_training_corpus(
+    mmlu_limit: int | None = None,
+    gsm8k_limit: int | None = None,
+    triviaqa_limit: int | None = None,
+    popqa_limit: int | None = None,
+    eval_sample_limit: int = 100,
+    progress: bool = True,
+    datasets: set[str] | None = None,
+) -> tuple[List[TrainingExample], List[BenchmarkSample]]:
+    """Build a large training corpus using full public train splits.
+
+    Default limits stream the entire available train split for each dataset:
+      - MMLU auxiliary_train:  ~99 K rows  -> ~198 K TrainingExamples
+      - GSM8K train:           ~7.5 K rows -> ~15 K TrainingExamples
+      - TriviaQA (rc) train:   ~87 K rows  -> ~174 K TrainingExamples
+      - PopQA test (proxy):    ~14 K rows  -> ~28 K TrainingExamples
+      - HumanEval:             ~130 rows   -> ~260 TrainingExamples
+
+    datasets: restrict loading to a subset, e.g. {"gsm8k"}.  None = all.
+    Evaluation samples come from held-out test/validation splits.
+    """
+    examples: List[TrainingExample] = []
+    samples: List[BenchmarkSample] = []
+
+    def _log(msg: str) -> None:
+        if progress:
+            print(msg, flush=True)
+
+    def _want(name: str) -> bool:
+        return datasets is None or name in datasets
+
+    # ------------------------------------------------------------------
+    # MMLU
+    # ------------------------------------------------------------------
+    if _want("mmlu"):
+        _log("Loading MMLU auxiliary_train ...")
+        mmlu_rows = take_rows("cais/mmlu", "all", "auxiliary_train", mmlu_limit)
+        _log(f"  {len(mmlu_rows)} rows")
+        for row in mmlu_rows:
+            answer_index = int(row["answer"])
+            trusted = str(row["choices"][answer_index])
+            poisoned = str(row["choices"][(answer_index + 1) % len(row["choices"])])
+            query = (
+                f"Subject: {row['subject']}\nQuestion: {row['question']}\n"
+                + "\n".join(f"Choice {chr(65+i)}: {c}" for i, c in enumerate(row["choices"]))
+            )
+            examples.extend(_make_trusted_example(
+                "mmlu", f"aux-{normalize_answer(row['question'])[:32]}",
+                query, trusted, poisoned, metadata={"subject": str(row["subject"])},
+            ))
+        for row in take_rows("cais/mmlu", "all", "test", eval_sample_limit):
+            answer_index = int(row["answer"])
+            trusted = str(row["choices"][answer_index])
+            query = (
+                f"Subject: {row['subject']}\nQuestion: {row['question']}\n"
+                + "\n".join(f"Choice {chr(65+i)}: {c}" for i, c in enumerate(row["choices"]))
+            )
+            samples.append(BenchmarkSample(
+                benchmark="mmlu",
+                sample_id=f"{row['subject']}-{normalize_answer(row['question'])[:32]}",
+                query=query, expected=trusted, acceptable=(trusted,),
+                eval_mode="exact", metadata={"subject": str(row["subject"])},
+            ))
+
+    # ------------------------------------------------------------------
+    # GSM8K
+    # ------------------------------------------------------------------
+    if _want("gsm8k"):
+        _log("Loading GSM8K train ...")
+        gsm_rows = take_rows("gsm8k", "main", "train", gsm8k_limit)
+        _log(f"  {len(gsm_rows)} rows")
+        for index, row in enumerate(gsm_rows):
+            trusted = extract_gsm8k_answer(str(row["answer"]))
+            poisoned = str(int(trusted) + 1) if trusted.lstrip("-").isdigit() else f"{trusted} wrong"
+            examples.extend(_make_trusted_example(
+                "gsm8k", f"train-{index}", str(row["question"]), trusted, poisoned,
+            ))
+        for index, row in enumerate(take_rows("gsm8k", "main", "test", eval_sample_limit)):
+            trusted = extract_gsm8k_answer(str(row["answer"]))
+            samples.append(BenchmarkSample(
+                benchmark="gsm8k", sample_id=str(index),
+                query=str(row["question"]), expected=trusted, acceptable=(trusted,),
+                eval_mode="numeric", metadata={},
+            ))
+
+    # ------------------------------------------------------------------
+    # TriviaQA
+    # ------------------------------------------------------------------
+    if _want("triviaqa"):
+        _log("Loading TriviaQA (rc) train ...")
+        tqa_rows = take_rows("trivia_qa", "rc", "train", triviaqa_limit)
+        _log(f"  {len(tqa_rows)} rows")
+        for row in tqa_rows:
+            aliases = [str(a) for a in row["answer"].get("aliases", []) if isinstance(a, str) and a.strip()]
+            if not aliases:
+                continue
+            trusted, poisoned = aliases[0], aliases[-1] + " wrong"
+            examples.extend(_make_trusted_example(
+                "triviaqa", f"train-{row['question_id']}", str(row["question"]), trusted, poisoned,
+            ))
+        for row in take_rows("trivia_qa", "rc", "validation", eval_sample_limit):
+            aliases = [str(a) for a in row["answer"].get("aliases", []) if isinstance(a, str) and a.strip()]
+            if not aliases:
+                continue
+            samples.append(BenchmarkSample(
+                benchmark="triviaqa", sample_id=str(row["question_id"]),
+                query=str(row["question"]), expected=aliases[0], acceptable=tuple(aliases),
+                eval_mode="alias", metadata={},
+            ))
+
+    # ------------------------------------------------------------------
+    # PopQA
+    # ------------------------------------------------------------------
+    if _want("popqa"):
+        _log("Loading PopQA ...")
+        popqa_train_rows = take_rows("akariasai/PopQA", None, "test", popqa_limit)
+        train_count = len(popqa_train_rows)
+        _log(f"  {train_count} train rows")
+        for row in popqa_train_rows:
+            possible_answers = json.loads(str(row["possible_answers"]))
+            trusted, poisoned = str(possible_answers[0]), str(row["subj"])
+            examples.extend(_make_trusted_example(
+                "popqa", f"train-{row['id']}", str(row["question"]), trusted, poisoned,
+            ))
+        for row in take_rows("akariasai/PopQA", None, "test", eval_sample_limit, offset=train_count):
+            possible_answers = json.loads(str(row["possible_answers"]))
+            trusted = str(possible_answers[0])
+            samples.append(BenchmarkSample(
+                benchmark="popqa", sample_id=str(row["id"]),
+                query=str(row["question"]), expected=trusted,
+                acceptable=tuple(str(a) for a in possible_answers),
+                eval_mode="alias", metadata={},
+            ))
+
+    # ------------------------------------------------------------------
+    # HumanEval
+    # ------------------------------------------------------------------
+    if _want("humaneval"):
+        _log("Loading HumanEval ...")
+        he_train_limit = 130
+        for row in take_rows("openai/openai_humaneval", None, "test", he_train_limit):
+            trusted = str(row["canonical_solution"])
+            entry_point = str(row["entry_point"])
+            poisoned = f"    return None  # poisoned for {entry_point}\n"
+            examples.extend(_make_trusted_example(
+                "humaneval", f"train-{row['task_id']}", str(row["prompt"]), trusted, poisoned,
+                metadata={"entry_point": entry_point},
+            ))
+        for row in take_rows("openai/openai_humaneval", None, "test", eval_sample_limit, offset=he_train_limit):
+            trusted = str(row["canonical_solution"])
+            entry_point = str(row["entry_point"])
+            samples.append(BenchmarkSample(
+                benchmark="humaneval", sample_id=str(row["task_id"]),
+                query=str(row["prompt"]), expected=trusted, acceptable=(trusted,),
+                eval_mode="humaneval",
+                metadata={"entry_point": entry_point, "test": str(row["test"])},
+            ))
+
+    _log(f"Full corpus: {len(examples)} training examples, {len(samples)} eval samples")
     return examples, samples
 
 

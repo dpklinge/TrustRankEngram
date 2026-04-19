@@ -4,11 +4,8 @@ This run targets a smaller high-value subset but uses the full public split volu
 
 | Benchmark | Metric | Shots | Samples | Baseline | Engram | Delta |
 | --- | --- | --- | ---: | ---: | ---: | ---: |
-| gsm8k | EM | 8-shot | 1319 | 0.0227 | 0.0235 | +0.0008 |
-| humaneval | Pass@1 | 0-shot | 82 | 0.0000 | 0.0000 | +0.0000 |
 
 ## Category Averages
 
 | Category | Baseline | Engram |
 | --- | ---: | ---: |
-| code_math | 0.0114 | 0.0118 |

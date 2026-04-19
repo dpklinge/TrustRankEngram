@@ -1,0 +1,107 @@
+{
+  "model": "gpt2-medium",
+  "checkpoint": "checkpoints/checkpoint_step02000.pt",
+  "neural_accuracy": 0.0,
+  "by_category": {
+    "knowledge": 0.0,
+    "reading": 0.0,
+    "code_math": 0.0,
+    "long_context": 0.0,
+    "long_context_multi": 0.0
+  },
+  "symbolic_proxy": {
+    "baseline": {
+      "code_math": 0.3333,
+      "knowledge": 1.0,
+      "long_context": 1.0,
+      "long_context_multi": 1.0,
+      "reading": 1.0
+    },
+    "engram": {
+      "code_math": 1.0,
+      "knowledge": 1.0,
+      "long_context": 1.0,
+      "long_context_multi": 1.0,
+      "reading": 1.0
+    }
+  },
+  "results": [
+    {
+      "category": "knowledge",
+      "query": "Who tamed Bucephalus?",
+      "expected": "Bucephalus was tamed by Alexander the Great.",
+      "generated": "Bucephalus was a giant snake that lived in the jungle. He was a very intelligent snake, and he was very intelligent. He was very intelligent, and he was very intelligent. He was very intelligent, and he was",
+      "correct": false
+    },
+    {
+      "category": "knowledge",
+      "query": "Which galaxy contains the Solar System?",
+      "expected": "The Solar System is in the Milky Way galaxy.",
+      "generated": "The answer is yes. The Milky Way galaxy contains the Sun, the Milky Way galaxy contains the Milky Way galaxy contains the Sun, the Milky Way galaxy contains the Milky Way galaxy contains the Sun, the Milky Way galaxy contains the Milky",
+      "correct": false
+    },
+    {
+      "category": "knowledge",
+      "query": "Name the Four Great Inventions of China",
+      "expected": "The Four Great Inventions are papermaking, the compass, gunpowder, and printing.",
+      "generated": "The Four Great Inventions of China\n\nThe Four Great Inventions of China\n\nThe Four Great Inventions of China\n\nThe Four Great Inventions of China\n\nThe Four Great Inventions of China\n\nThe",
+      "correct": false
+    },
+    {
+      "category": "reading",
+      "query": "In the passage where did Amelia hide the brass key?",
+      "expected": "The brass key was hidden in the blue teapot.",
+      "generated": "The brass key was found in the attic of the house where Amelia lived.\n\nThe key was found in the attic of the house where Amelia lived. The key was found in the attic of the house where Amelia lived. The",
+      "correct": false
+    },
+    {
+      "category": "reading",
+      "query": "Where was the atlas stored in the archive room passage?",
+      "expected": "The atlas was stored on the top shelf.",
+      "generated": "The atlas was stored in the archive room passage.\n\nWhat was the location of the atlas in the archive room passage?\n\nThe atlas was stored in the archive room passage.\n\nWhat was the location",
+      "correct": false
+    },
+    {
+      "category": "code_math",
+      "query": "What returns a Python list length?",
+      "expected": "Use len(my_list) to get a Python list length.",
+      "generated": ">>> import list >>> list = [1, 2, 3, 4, 5, 6, 7, 8, 9] >>> list.sort(lambda x: x.sort(lambda x: x.sort(lambda x",
+      "correct": false
+    },
+    {
+      "category": "code_math",
+      "query": "What is 12 times 12?",
+      "expected": "12 * 12 = 144.",
+      "generated": "12 times 12 is the number of times a person can be born.\n\n12 times 12 is the number of times a person can be born. 12 times 12 is the number of times a person can be born. 12 times",
+      "correct": false
+    },
+    {
+      "category": "code_math",
+      "query": "What is the derivative of x squared?",
+      "expected": "d/dx x^2 = 2x.",
+      "generated": "The derivative of x squared is the product of the two quantities x and y.\n\nExample:\n\nx = 2.5\n\ny = 2.5\n\nx = 2.5\n\ny = 2",
+      "correct": false
+    },
+    {
+      "category": "long_context",
+      "query": "In the long context, what is the Project Orion launch code?",
+      "expected": "Project Orion launch code: delta-792.",
+      "generated": "The Project Orion launch code is a code that is used to launch the Orion spacecraft into orbit. The code is a combination of the following:\n\nA launch countdown code\n\nA launch countdown timer\n\nA launch countdown timer",
+      "correct": false
+    },
+    {
+      "category": "long_context",
+      "query": "In the long context, what is the museum ledger marker?",
+      "expected": "Museum ledger marker: amber room north wall.",
+      "generated": "The museum ledger is a record of the transactions of the museum. It is a record of the transactions of the museum. It is a record of the transactions of the museum. It is a record of the transactions of the museum.",
+      "correct": false
+    },
+    {
+      "category": "long_context_multi",
+      "query": "In the multi query long context what are the river and vault tokens?",
+      "expected": "river=silver pine; vault=copper gate",
+      "generated": "The river token is the token that is used to create the vault. The vault token is the token that is used to create the river.\n\nThe vault token is the token that is used to create the river. The river",
+      "correct": false
+    }
+  ]
+}
